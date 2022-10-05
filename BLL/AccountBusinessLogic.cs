@@ -11,6 +11,24 @@ namespace TieredBankAPI.BLL
             _repo = repo;
         }
 
+        public void Deposit(int id, decimal amount)
+        {
+            Account account = _repo.GetAccountByID(id);
+
+            if (account == null)
+            {
+                throw new KeyNotFoundException();
+            } else
+            {
+                if (amount <= 0)
+                {
+                    throw new ArgumentException("Deposit amount must be greater than zero");
+                }
+                account.Balance += amount;
+                _repo.Save(); 
+            }
+        }
+
         public decimal GetBalance(int id)
         {
             Account account = _repo.GetAccountByID(id);
@@ -54,3 +72,8 @@ namespace TieredBankAPI.BLL
         }
     }
 }
+
+/*[1:41 PM] Zacharie Montreuil
+Create an endpoint for Depositing money into an account, when the Account ID is providedAdd a "is active" property (bool) to an account. If it's not active, it can't be deposited to or withdrawn from.Add an endpoint for switching an account between active or inactive
+
+*/

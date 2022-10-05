@@ -65,4 +65,18 @@ app.MapGet("/customers/{id}/total", async (TieredBankAPIContext db, string id) =
     return Results.Ok(response);
 });
 
+app.MapPost("/accounts/{id}/deposit/{amount}", (TieredBankAPIContext db,string id, string amount) =>
+{
+    AccountBusinessLogic accountBL = new AccountBusinessLogic(new AccountRepository(db));
+    try
+    {
+        accountBL.Deposit(int.Parse(id), decimal.Parse(amount));
+        return Results.Ok();
+    }
+    catch
+    {
+        return Results.Problem();
+    }
+});
+
 app.Run();
